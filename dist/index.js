@@ -1155,7 +1155,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(__webpack_require__(186));
 const glob = __importStar(__webpack_require__(90));
-const promises_1 = __importDefault(__webpack_require__(865));
+const fs_1 = __importDefault(__webpack_require__(747));
 const path_1 = __importDefault(__webpack_require__(622));
 const handlebars_1 = __importDefault(__webpack_require__(492));
 const run = async () => {
@@ -1172,12 +1172,12 @@ const run = async () => {
         };
         const globber = await glob.create(config.files);
         for await (const filename of globber.globGenerator()) {
-            const fileStats = await promises_1.default.stat(filename);
+            const fileStats = await fs_1.default.promises.stat(filename);
             if (!fileStats.isFile) {
                 continue;
             }
             core.debug(`Processing file "${filename}"...`);
-            const fileContent = await promises_1.default.readFile(filename);
+            const fileContent = await fs_1.default.promises.readFile(filename);
             core.debug(`\tCreating template...`);
             const fileContentTemplate = handlebars_1.default.compile(fileContent);
             core.debug(`\tApplying template...`);
@@ -1203,7 +1203,7 @@ const run = async () => {
             const newFileContent = fileContentTemplate(dataWithOutputFile);
             core.debug(`\tSaving file "${newFilename}"...`);
             if (!config.dryRun) {
-                await promises_1.default.writeFile(newFilename, newFileContent);
+                await fs_1.default.promises.writeFile(newFilename, newFileContent);
             }
         }
     }
@@ -9880,14 +9880,6 @@ function expand(str, isTop) {
   return expansions;
 }
 
-
-
-/***/ }),
-
-/***/ 865:
-/***/ (function(module) {
-
-module.exports = eval("require")("fs/promises");
 
 
 /***/ }),

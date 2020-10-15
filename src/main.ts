@@ -1,6 +1,6 @@
 import * as core from '@actions/core'
 import * as glob from '@actions/glob'
-import fs from 'fs/promises'
+import fs from 'fs'
 import path from 'path'
 import handlebars from 'handlebars'
 
@@ -23,7 +23,7 @@ const run = async (): Promise<void> => {
     const globber = await glob.create(config.files)
 
     for await (const filename of globber.globGenerator()) {
-      const fileStats = await fs.stat(filename)
+      const fileStats = await fs.promises.stat(filename)
 
       if (!fileStats.isFile) {
         continue
@@ -31,7 +31,7 @@ const run = async (): Promise<void> => {
 
       core.debug(`Processing file "${filename}"...`)
 
-      const fileContent = await fs.readFile(filename)
+      const fileContent = await fs.promises.readFile(filename)
 
       core.debug(`\tCreating template...`)
 
@@ -64,7 +64,7 @@ const run = async (): Promise<void> => {
       core.debug(`\tSaving file "${newFilename}"...`)
 
       if (!config.dryRun) {
-        await fs.writeFile(newFilename, newFileContent)
+        await fs.promises.writeFile(newFilename, newFileContent)
       }
     }
   } catch (error) {
