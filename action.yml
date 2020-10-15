@@ -3,9 +3,17 @@ description: 'Provide a description here'
 author: 'Pedro Lamas'
 inputs:
   files:
-    required: true
+    required: false
     description: 'Files to process'
     default: '**/*.template'
+  dry-run:
+    required: false
+    description: 'Make no real changes'
+    default: 'false'
+  output-filename:
+    required: false
+    description: 'Output filename template'
+    default: '{{ file.dir }}/{{ file.name }}'
 runs:
   using: 'node12'
   main: 'dist/index.js'

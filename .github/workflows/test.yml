@@ -22,3 +22,8 @@ jobs:
       - uses: ./
         with:
           files: '**/*.ts'
+      - name: Archive README.md
+        uses: actions/upload-artifact@v2
+        with:
+          name: README.md
+          path: __tests__/__stubs__/*.*
