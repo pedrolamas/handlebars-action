@@ -31,7 +31,7 @@ const run = async (): Promise<void> => {
 
       core.debug(`Processing file "${filename}"...`)
 
-      const fileContent = await fs.promises.readFile(filename)
+      const fileContent = await fs.promises.readFile(filename, 'utf8')
 
       core.debug(`\tCreating template...`)
 

@@ -1177,7 +1177,7 @@ const run = async () => {
                 continue;
             }
             core.debug(`Processing file "${filename}"...`);
-            const fileContent = await fs_1.default.promises.readFile(filename);
+            const fileContent = await fs_1.default.promises.readFile(filename, 'utf8');
             core.debug(`\tCreating template...`);
             const fileContentTemplate = handlebars_1.default.compile(fileContent);
             core.debug(`\tApplying template...`);
