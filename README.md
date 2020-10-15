@@ -7,6 +7,10 @@
 
 [![Twitter Follow](https://img.shields.io/twitter/follow/pedrolamas?style=social)](https://twitter.com/pedrolamas)
 
+This action will find files in the repo matching a specific search spec and process them as [Handlebars](https://handlebarsjs.com) templates.
+
+The full expression syntax of Handlebars can be used on the templates.
+
 ## Usage
 
 ```yaml
@@ -74,7 +78,7 @@
 
 ### Misc
 
-- `{{ date }}` - The current date as output from `new Date().toString()`.
+- `{{ date }}` - The output of `new Date()`.
 
 ## License
 

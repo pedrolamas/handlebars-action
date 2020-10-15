@@ -1,3 +1,35 @@
-path: {{ file.dir }}
-filename: {{ file.name }}
-output filename: {{ outputFile.name }}
+env.user: {{ env.USER }}
+
+action: {{ github.action }}
+actor: {{ github.actor }}
+api_url: {{ github.api_url }}
+base_ref: {{ github.base_ref }}
+event_name: {{ github.event_name }}
+event_path: {{ github.event_path }}
+graphql_url: {{ github.graphql_url }}
+head_ref: {{ github.head_ref }}
+ref: {{ github.ref }}
+repository: {{ github.repository }}
+run_id: {{ github.run_id }}
+run_number: {{ github.run_number }}
+server_url: {{ github.server_url }}
+sha: {{ github.sha }}
+workflow: {{ github.workflow }}
+workspace: {{ github.workspace }}
+
+file.path: {{ file.path }}
+file.root: {{ file.root }}
+file.dir: {{ file.dir }}
+file.base: {{ file.base }}
+file.ext: {{ file.ext }}
+file.name: {{ file.name }}
+
+outputFile.path: {{ outputFile.path }}
+outputFile.root: {{ outputFile.root }}
+outputFile.dir: {{ outputFile.dir }}
+outputFile.base: {{ outputFile.base }}
+outputFile.ext: {{ outputFile.ext }}
+outputFile.name: {{ outputFile.name }}
+
+date: {{ date }}
+date.year: {{ date.year }}
