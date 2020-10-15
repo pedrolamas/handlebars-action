@@ -1,16 +1,33 @@
 import * as core from '@actions/core'
-import {wait} from './wait'
+import * as glob from '@actions/glob'
+// import fs from 'fs/promises'
+// import handlebars from 'handlebars'
 
-async function run(): Promise<void> {
+const run = async (): Promise<void> => {
   try {
-    const ms: string = core.getInput('milliseconds')
-    core.debug(`Waiting ${ms} milliseconds ...`) // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
+    const globber = await glob.create('**/*.template')
 
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
+    for await (const file of globber.globGenerator()) {
+      core.debug(`Process: ${file}`)
 
-    core.setOutput('time', new Date().toTimeString())
+      // const fileContent = await fs.readFile(file)
+
+      // const template = handlebars.compile(fileContent)
+
+      // const data = {
+      //   file: {
+      //     name: file
+      //   },
+      //   env: {...process.env},
+      //   data: null
+      // }
+
+      // const newFileContent = template(data)
+
+      // fs.writeFile(file, newFileContent)
+    }
+
+    // core.setOutput('time', new Date().toTimeString())
   } catch (error) {
     core.setFailed(error.message)
   }
