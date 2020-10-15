@@ -1,4 +1,4 @@
-# @pedrolamas/handlebars-action
+# PedroLamas/handlebars-action
 
 ![Project Maintenance](https://img.shields.io/maintenance/yes/2020.svg)
 [![License](https://img.shields.io/github/license/PedroLamas/handlebars-action.svg)](https://github.com/PedroLamas/handlebars-action/blob/master/LICENSE)
@@ -14,7 +14,7 @@ The full expression syntax of Handlebars can be used on the templates.
 ## Usage
 
 ```yaml
-- uses: @pedrolamas/handlebars-action
+- uses: PedroLamas/handlebars-action
   with:
     # Files to process
     # Default: '**/*.template'
