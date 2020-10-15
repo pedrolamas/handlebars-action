@@ -78,7 +78,7 @@ The full expression syntax of Handlebars can be used on the templates.
 
 ### Misc
 
-- `{{ date }}` - The output of `new Date()`.
+- `{{ date }}` - The current date as output from `new Date().toString()`.
 
 ## License
 
