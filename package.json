@@ -6,24 +6,37 @@
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
-    "format": "prettier --write **/*.ts",
-    "format-check": "prettier --check **/*.ts",
-    "lint": "eslint src/**/*.ts",
     "package": "ncc build --source-map --license licenses.txt",
     "test": "jest",
-    "all": "npm run build && npm run format && npm run lint && npm run package"
+    "all": "npm run build && npm run lint && npm run package",
+    "lint": "npm run lint:code && npm run lint:other",
+    "lint:code": "npm run eslint:defaults",
+    "lint:other": "npm run prettier:defaults -- --check",
+    "format": "npm run format:code && npm run format:other",
+    "format:code": "npm run eslint:defaults -- --fix",
+    "format:other": "npm run prettier:defaults -- --write",
+    "eslint:defaults": "eslint . --ext .ts,.tsx,.js,.jsx",
+    "prettier:defaults": "prettier \"**/*.{json,md,markdown,css,scss,yaml,yml}\""
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/PedroLamas/handlebars-template-action.git"
   },
   "keywords": [
-    "actions",
-    "node",
+    "handlebars",
+    "action",
+    "template",
+    "github",
+    "repository",
+    "repo",
     "setup"
   ],
-  "author": "",
+  "author": "Pedro Lamas <pedrolamas@gmail.com>",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/PedroLamas/handlebars-template-action/issues"
+  },
+  "homepage": "https://github.com/PedroLamas/handlebars-template-action#readme",
   "dependencies": {
     "@actions/core": "^1.2.6",
     "@actions/glob": "^0.1.0",

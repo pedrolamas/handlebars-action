@@ -1,6 +1,9 @@
 name: 'Handlebars Templating Engine'
-description: 'Provide a description here'
 author: 'Pedro Lamas'
+description: 'Apply Handlebar templating to files'
+branding:
+  icon: 'zap'
+  color: 'blue'
 inputs:
   files:
     required: false
