@@ -1,4 +1,4 @@
-# handlebars-template-action
+# @pedrolamas/handlebars-action
 
 WIP
 
