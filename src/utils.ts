@@ -15,6 +15,7 @@ export const buildBaseData = (): BaseData => ({
     head_ref: process.env['GITHUB_HEAD_REF'],
     ref: process.env['GITHUB_REF'],
     repository: process.env['GITHUB_REPOSITORY'],
+    repository_name: process.env['GITHUB_REPOSITORY']?.replace(/.*\//, ''),
     run_id: process.env['GITHUB_RUN_ID'],
     run_number: process.env['GITHUB_RUN_NUMBER'],
     server_url: process.env['GITHUB_SERVER_URL'],

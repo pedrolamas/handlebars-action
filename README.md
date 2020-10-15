@@ -69,6 +69,7 @@ The full expression syntax of Handlebars can be used on the templates.
 - `{{ github.head_ref }}` - Only set for forked repositories. The branch of the head repository.
 - `{{ github.ref }}` - The branch or tag ref that triggered the workflow. For example, refs/heads/feature-branch-1. If neither a branch or tag is available for the event type, the variable will not exist.
 - `{{ github.repository }}` - The owner and repository name. For example, octocat/Hello-World.
+- `{{ github.repository_name }}` - The repository name. For example, Hello-World.
 - `{{ github.run_id }}` - A unique number for each run within a repository. This number does not change if you re-run the workflow run.
 - `{{ github.run_number }}` - A unique number for each run of a particular workflow in a repository. This number begins at 1 for the workflow's first run, and increments with each new run. This number does not change if you re-run the workflow run.
 - `{{ github.server_url }}` - Returns the URL of the GitHub server. For example: https://github.com.

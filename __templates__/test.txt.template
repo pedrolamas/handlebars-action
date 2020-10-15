@@ -10,6 +10,7 @@ graphql_url: {{ github.graphql_url }}
 head_ref: {{ github.head_ref }}
 ref: {{ github.ref }}
 repository: {{ github.repository }}
+repository_name: {{ github.repository_name }}
 run_id: {{ github.run_id }}
 run_number: {{ github.run_number }}
 server_url: {{ github.server_url }}

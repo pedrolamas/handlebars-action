@@ -21,6 +21,7 @@ type BaseData = {
     head_ref?: string;
     ref?: string;
     repository?: string;
+    repository_name?: string;
     run_id?: string;
     run_number?: string;
     server_url?: string;
