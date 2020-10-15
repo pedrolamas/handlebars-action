@@ -278,7 +278,7 @@ const glob = __importStar(__webpack_require__(90));
 const run = () => __awaiter(void 0, void 0, void 0, function* () {
     var e_1, _a;
     try {
-        const globber = yield glob.create('**/*.template');
+        const globber = yield glob.create(core.getInput('files'));
         try {
             for (var _b = __asyncValues(globber.globGenerator()), _c; _c = yield _b.next(), !_c.done;) {
                 const file = _c.value;

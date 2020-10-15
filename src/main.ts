@@ -5,7 +5,7 @@ import * as glob from '@actions/glob'
 
 const run = async (): Promise<void> => {
   try {
-    const globber = await glob.create('**/*.template')
+    const globber = await glob.create(core.getInput('files'))
 
     for await (const file of globber.globGenerator()) {
       core.debug(`Process: ${file}`)
