@@ -1,5 +1,5 @@
-import core from '@actions/core';
-import glob from '@actions/glob';
+import * as core from '@actions/core';
+import * as glob from '@actions/glob';
 import fs from 'fs';
 import handlebars from 'handlebars';
 import { Data, DataWithOutputFile } from './types';

@@ -7,33 +7,52 @@ require('./sourcemap-register.js');module.exports =
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const core_1 = __importDefault(__webpack_require__(2186));
-const glob_1 = __importDefault(__webpack_require__(8090));
+const core = __importStar(__webpack_require__(2186));
+const glob = __importStar(__webpack_require__(8090));
 const fs_1 = __importDefault(__webpack_require__(5747));
 const handlebars_1 = __importDefault(__webpack_require__(7492));
 const utils_1 = __webpack_require__(918);
 const run = async () => {
     try {
         const config = {
-            files: core_1.default.getInput('files'),
-            outputFilename: core_1.default.getInput('output-filename'),
-            deleteInputFile: core_1.default.getInput('delete-input-file'),
-            dryRun: core_1.default.getInput('dry-run') === 'true',
+            files: core.getInput('files'),
+            outputFilename: core.getInput('output-filename'),
+            deleteInputFile: core.getInput('delete-input-file'),
+            dryRun: core.getInput('dry-run') === 'true',
         };
-        core_1.default.debug(`Configuration:\n${JSON.stringify(config, undefined, 2)}`);
+        core.debug(`Configuration:\n${JSON.stringify(config, undefined, 2)}`);
         const baseData = utils_1.buildBaseData();
         const outputFilenameCompiledTemplate = handlebars_1.default.compile(config.outputFilename);
-        const globber = await glob_1.default.create(config.files);
+        const globber = await glob.create(config.files);
         for await (const inputFilename of globber.globGenerator()) {
             const fileStats = await fs_1.default.promises.stat(inputFilename);
             if (!fileStats.isFile) {
                 continue;
             }
-            core_1.default.debug(`Reading input file "${inputFilename}"...`);
+            core.debug(`Reading input file "${inputFilename}"...`);
             const data = {
                 ...baseData,
                 file: utils_1.buildFileData(inputFilename),
@@ -47,19 +66,19 @@ const run = async () => {
             };
             const outputContent = utils_1.buildAndApplyTemplate(inputContent, dataWithOutputFile);
             if (config.deleteInputFile) {
-                core_1.default.debug(`Deleting input file...`);
+                core.debug(`Deleting input file...`);
                 if (!config.dryRun) {
                     await fs_1.default.promises.unlink(inputFilename);
                 }
             }
-            core_1.default.debug(`Writing output file "${outputFilename}"...`);
+            core.debug(`Writing output file "${outputFilename}"...`);
             if (!config.dryRun) {
                 await fs_1.default.promises.writeFile(outputFilename, outputContent);
             }
         }
     }
     catch (error) {
-        core_1.default.setFailed(error.message);
+        core.setFailed(error.message);
     }
 };
 run();
