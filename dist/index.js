@@ -26,6 +26,22 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __asyncValues = (this && this.__asyncValues) || function (o) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var m = o[Symbol.asyncIterator], i;
+    return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
+    function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
+    function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -35,7 +51,8 @@ const glob = __importStar(__webpack_require__(8090));
 const fs_1 = __importDefault(__webpack_require__(5747));
 const handlebars_1 = __importDefault(__webpack_require__(7492));
 const utils_1 = __webpack_require__(918);
-const run = async () => {
+const run = () => __awaiter(void 0, void 0, void 0, function* () {
+    var e_1, _a;
     try {
         const config = {
             files: core.getInput('files'),
@@ -46,41 +63,44 @@ const run = async () => {
         core.debug(`Configuration:\n${JSON.stringify(config, undefined, 2)}`);
         const baseData = utils_1.buildBaseData();
         const outputFilenameCompiledTemplate = handlebars_1.default.compile(config.outputFilename);
-        const globber = await glob.create(config.files);
-        for await (const inputFilename of globber.globGenerator()) {
-            const fileStats = await fs_1.default.promises.stat(inputFilename);
-            if (!fileStats.isFile) {
-                continue;
-            }
-            core.debug(`Reading input file "${inputFilename}"...`);
-            const data = {
-                ...baseData,
-                file: utils_1.buildFileData(inputFilename),
-                date: new Date(),
-            };
-            const outputFilename = utils_1.applyTemplate(outputFilenameCompiledTemplate, data);
-            const inputContent = await fs_1.default.promises.readFile(inputFilename, 'utf8');
-            const dataWithOutputFile = {
-                ...data,
-                outputFile: utils_1.buildFileData(outputFilename),
-            };
-            const outputContent = utils_1.buildAndApplyTemplate(inputContent, dataWithOutputFile);
-            if (config.deleteInputFile) {
-                core.debug(`Deleting input file...`);
+        const globber = yield glob.create(config.files);
+        try {
+            for (var _b = __asyncValues(globber.globGenerator()), _c; _c = yield _b.next(), !_c.done;) {
+                const inputFilename = _c.value;
+                const fileStats = yield fs_1.default.promises.stat(inputFilename);
+                if (!fileStats.isFile) {
+                    continue;
+                }
+                core.debug(`Reading input file "${inputFilename}"...`);
+                const data = Object.assign(Object.assign({}, baseData), { file: utils_1.buildFileData(inputFilename), date: new Date() });
+                const outputFilename = utils_1.applyTemplate(outputFilenameCompiledTemplate, data);
+                const inputContent = yield fs_1.default.promises.readFile(inputFilename, 'utf8');
+                const dataWithOutputFile = Object.assign(Object.assign({}, data), { outputFile: utils_1.buildFileData(outputFilename) });
+                const outputContent = utils_1.buildAndApplyTemplate(inputContent, dataWithOutputFile);
+                if (config.deleteInputFile) {
+                    core.debug(`Deleting input file...`);
+                    if (!config.dryRun) {
+                        yield fs_1.default.promises.unlink(inputFilename);
+                    }
+                }
+                core.debug(`Writing output file "${outputFilename}"...`);
                 if (!config.dryRun) {
-                    await fs_1.default.promises.unlink(inputFilename);
+                    yield fs_1.default.promises.writeFile(outputFilename, outputContent);
                 }
             }
-            core.debug(`Writing output file "${outputFilename}"...`);
-            if (!config.dryRun) {
-                await fs_1.default.promises.writeFile(outputFilename, outputContent);
+        }
+        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+        finally {
+            try {
+                if (_c && !_c.done && (_a = _b.return)) yield _a.call(_b);
             }
+            finally { if (e_1) throw e_1.error; }
         }
     }
     catch (error) {
         core.setFailed(error.message);
     }
-};
+});
 run();
 
 
@@ -98,32 +118,32 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.buildAndApplyTemplate = exports.applyTemplate = exports.buildFileData = exports.buildBaseData = void 0;
 const path_1 = __importDefault(__webpack_require__(5622));
 const handlebars_1 = __importDefault(__webpack_require__(7492));
-exports.buildBaseData = () => ({
-    env: { ...process.env },
-    github: {
-        action: process.env['GITHUB_ACTION'],
-        actor: process.env['GITHUB_ACTOR'],
-        api_url: process.env['GITHUB_API_URL'],
-        base_ref: process.env['GITHUB_BASE_REF'],
-        event_name: process.env['GITHUB_EVENT_NAME'],
-        event_path: process.env['GITHUB_EVENT_PATH'],
-        graphql_url: process.env['GITHUB_GRAPHQL_URL'],
-        head_ref: process.env['GITHUB_HEAD_REF'],
-        ref: process.env['GITHUB_REF'],
-        repository: process.env['GITHUB_REPOSITORY'],
-        repository_name: process.env['GITHUB_REPOSITORY']?.replace(/.*\//, ''),
-        run_id: process.env['GITHUB_RUN_ID'],
-        run_number: process.env['GITHUB_RUN_NUMBER'],
-        server_url: process.env['GITHUB_SERVER_URL'],
-        sha: process.env['GITHUB_SHA'],
-        workflow: process.env['GITHUB_WORKFLOW'],
-        workspace: process.env['GITHUB_WORKSPACE'],
-    },
-});
-exports.buildFileData = (filename) => ({
-    ...path_1.default.parse(filename),
-    path: filename,
-});
+exports.buildBaseData = () => {
+    var _a;
+    return ({
+        env: Object.assign({}, process.env),
+        github: {
+            action: process.env['GITHUB_ACTION'],
+            actor: process.env['GITHUB_ACTOR'],
+            api_url: process.env['GITHUB_API_URL'],
+            base_ref: process.env['GITHUB_BASE_REF'],
+            event_name: process.env['GITHUB_EVENT_NAME'],
+            event_path: process.env['GITHUB_EVENT_PATH'],
+            graphql_url: process.env['GITHUB_GRAPHQL_URL'],
+            head_ref: process.env['GITHUB_HEAD_REF'],
+            ref: process.env['GITHUB_REF'],
+            repository: process.env['GITHUB_REPOSITORY'],
+            repository_name: (_a = process.env['GITHUB_REPOSITORY']) === null || _a === void 0 ? void 0 : _a.replace(/.*\//, ''),
+            run_id: process.env['GITHUB_RUN_ID'],
+            run_number: process.env['GITHUB_RUN_NUMBER'],
+            server_url: process.env['GITHUB_SERVER_URL'],
+            sha: process.env['GITHUB_SHA'],
+            workflow: process.env['GITHUB_WORKFLOW'],
+            workspace: process.env['GITHUB_WORKSPACE'],
+        },
+    });
+};
+exports.buildFileData = (filename) => (Object.assign(Object.assign({}, path_1.default.parse(filename)), { path: filename }));
 exports.applyTemplate = (template, data) => template(data);
 exports.buildAndApplyTemplate = (template, data) => {
     const compiledTemplate = handlebars_1.default.compile(template);
