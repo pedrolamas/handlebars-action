@@ -1,90 +1,79 @@
 import * as core from '@actions/core'
 import * as glob from '@actions/glob'
 import fs from 'fs'
-import path from 'path'
 import handlebars from 'handlebars'
+import {
+  buildBaseData,
+  buildFileData,
+  applyTemplate,
+  buildAndApplyTemplate,
+  Data,
+  DataWithOutputFile
+} from './utils'
 
 const run = async (): Promise<void> => {
   try {
     const config = {
       files: core.getInput('files'),
-      dryRun: core.getInput('dry-run') === 'true',
-      outputFilename: core.getInput('output-filename')
+      outputFilename: core.getInput('output-filename'),
+      deleteInputFile: core.getInput('delete-input-file'),
+      dryRun: core.getInput('dry-run') === 'true'
     }
 
     core.debug(`Configuration:\n${JSON.stringify(config, undefined, 2)}`)
 
-    const outputFilenameTemplate = handlebars.compile(config.outputFilename)
+    const baseData = buildBaseData()
 
-    const baseData = {
-      env: {...process.env}
-    }
+    const outputFilenameCompiledTemplate = handlebars.compile(
+      config.outputFilename
+    )
 
     const globber = await glob.create(config.files)
 
-    for await (const filename of globber.globGenerator()) {
-      const fileStats = await fs.promises.stat(filename)
+    for await (const inputFilename of globber.globGenerator()) {
+      const fileStats = await fs.promises.stat(inputFilename)
 
       if (!fileStats.isFile) {
         continue
       }
 
-      core.debug(`Processing file "${filename}"...`)
+      core.debug(`Reading input file "${inputFilename}"...`)
 
-      const fileContent = await fs.promises.readFile(filename, 'utf8')
-
-      core.debug(`\tCreating template...`)
-
-      const fileContentTemplate = handlebars.compile(fileContent)
-
-      core.debug(`\tApplying template...`)
-
-      const data = {
+      const data: Data = {
         ...baseData,
-        file: {
-          ...path.parse(filename),
-          path: filename
-          // ...stringPropertiesOnly(fileStats)
-        },
-        date: {
-          now: new Date().toISOString()
-        }
+        file: buildFileData(inputFilename),
+        date: new Date()
       }
-      const newFilename = outputFilenameTemplate(data)
+      const outputFilename = applyTemplate(outputFilenameCompiledTemplate, data)
 
-      const dataWithOutputFile = {
+      const inputContent = await fs.promises.readFile(inputFilename, 'utf8')
+
+      const dataWithOutputFile: DataWithOutputFile = {
         ...data,
-        outputFile: {
-          ...path.parse(newFilename),
-          path: newFilename
+        outputFile: buildFileData(outputFilename)
+      }
+      const outputContent = buildAndApplyTemplate(
+        inputContent,
+        dataWithOutputFile
+      )
+
+      if (config.deleteInputFile) {
+        core.debug(`Deleting input file...`)
+
+        if (!config.dryRun) {
+          await fs.promises.unlink(inputFilename)
         }
       }
-      const newFileContent = fileContentTemplate(dataWithOutputFile)
 
-      core.debug(`\tSaving file "${newFilename}"...`)
+      core.debug(`Writing output file "${outputFilename}"...`)
 
       if (!config.dryRun) {
-        await fs.promises.writeFile(newFilename, newFileContent)
+        await fs.promises.writeFile(outputFilename, outputContent)
       }
     }
   } catch (error) {
     core.setFailed(error.message)
   }
 }
-
-// type ObjectOfStrings = {
-//   [key: string]: string | undefined
-// }
-
-// const stringPropertiesOnly = (item: object): ObjectOfStrings => {
-//   return Object.entries(item)
-//     .filter(
-//       ([, value]) => typeof value === 'string' || typeof value === 'number'
-//     )
-//     .reduce(
-//       (res, [key, value]) => (res[key] = value.toString()),
-//       {} as ObjectOfStrings
-//     )
-// }
 
 run()

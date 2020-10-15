@@ -1156,54 +1156,47 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(__webpack_require__(186));
 const glob = __importStar(__webpack_require__(90));
 const fs_1 = __importDefault(__webpack_require__(747));
-const path_1 = __importDefault(__webpack_require__(622));
 const handlebars_1 = __importDefault(__webpack_require__(492));
+const utils_1 = __webpack_require__(918);
 const run = async () => {
     try {
         const config = {
             files: core.getInput('files'),
-            dryRun: core.getInput('dry-run') === 'true',
-            outputFilename: core.getInput('output-filename')
+            outputFilename: core.getInput('output-filename'),
+            deleteInputFile: core.getInput('delete-input-file'),
+            dryRun: core.getInput('dry-run') === 'true'
         };
         core.debug(`Configuration:\n${JSON.stringify(config, undefined, 2)}`);
-        const outputFilenameTemplate = handlebars_1.default.compile(config.outputFilename);
-        const baseData = {
-            env: { ...process.env }
-        };
+        const baseData = utils_1.buildBaseData();
+        const outputFilenameCompiledTemplate = handlebars_1.default.compile(config.outputFilename);
         const globber = await glob.create(config.files);
-        for await (const filename of globber.globGenerator()) {
-            const fileStats = await fs_1.default.promises.stat(filename);
+        for await (const inputFilename of globber.globGenerator()) {
+            const fileStats = await fs_1.default.promises.stat(inputFilename);
             if (!fileStats.isFile) {
                 continue;
             }
-            core.debug(`Processing file "${filename}"...`);
-            const fileContent = await fs_1.default.promises.readFile(filename, 'utf8');
-            core.debug(`\tCreating template...`);
-            const fileContentTemplate = handlebars_1.default.compile(fileContent);
-            core.debug(`\tApplying template...`);
+            core.debug(`Reading input file "${inputFilename}"...`);
             const data = {
                 ...baseData,
-                file: {
-                    ...path_1.default.parse(filename),
-                    path: filename
-                    // ...stringPropertiesOnly(fileStats)
-                },
-                date: {
-                    now: new Date().toISOString()
-                }
+                file: utils_1.buildFileData(inputFilename),
+                date: new Date()
             };
-            const newFilename = outputFilenameTemplate(data);
+            const outputFilename = utils_1.applyTemplate(outputFilenameCompiledTemplate, data);
+            const inputContent = await fs_1.default.promises.readFile(inputFilename, 'utf8');
             const dataWithOutputFile = {
                 ...data,
-                outputFile: {
-                    ...path_1.default.parse(newFilename),
-                    path: newFilename
-                }
+                outputFile: utils_1.buildFileData(outputFilename)
             };
-            const newFileContent = fileContentTemplate(dataWithOutputFile);
-            core.debug(`\tSaving file "${newFilename}"...`);
+            const outputContent = utils_1.buildAndApplyTemplate(inputContent, dataWithOutputFile);
+            if (config.deleteInputFile) {
+                core.debug(`Deleting input file...`);
+                if (!config.dryRun) {
+                    await fs_1.default.promises.unlink(inputFilename);
+                }
+            }
+            core.debug(`Writing output file "${outputFilename}"...`);
             if (!config.dryRun) {
-                await fs_1.default.promises.writeFile(newFilename, newFileContent);
+                await fs_1.default.promises.writeFile(outputFilename, outputContent);
             }
         }
     }
@@ -1211,19 +1204,6 @@ const run = async () => {
         core.setFailed(error.message);
     }
 };
-// type ObjectOfStrings = {
-//   [key: string]: string | undefined
-// }
-// const stringPropertiesOnly = (item: object): ObjectOfStrings => {
-//   return Object.entries(item)
-//     .filter(
-//       ([, value]) => typeof value === 'string' || typeof value === 'number'
-//     )
-//     .reduce(
-//       (res, [key, value]) => (res[key] = value.toString()),
-//       {} as ObjectOfStrings
-//     )
-// }
 run();
 
 
@@ -9971,6 +9951,34 @@ module.exports = function (xs, fn) {
 
 var isArray = Array.isArray || function (xs) {
     return Object.prototype.toString.call(xs) === '[object Array]';
+};
+
+
+/***/ }),
+
+/***/ 918:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.buildAndApplyTemplate = exports.applyTemplate = exports.buildFileData = exports.buildBaseData = void 0;
+const path_1 = __importDefault(__webpack_require__(622));
+const handlebars_1 = __importDefault(__webpack_require__(492));
+exports.buildBaseData = () => ({
+    env: { ...process.env }
+});
+exports.buildFileData = (filename) => ({
+    ...path_1.default.parse(filename),
+    path: filename
+});
+exports.applyTemplate = (template, data) => template(data);
+exports.buildAndApplyTemplate = (template, data) => {
+    const compiledTemplate = handlebars_1.default.compile(template);
+    return exports.applyTemplate(compiledTemplate, data);
 };
 
 

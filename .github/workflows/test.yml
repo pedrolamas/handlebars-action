@@ -11,16 +11,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: |
-          npm install
-      - run: |
-          npm run all
-  test: # make sure the action works on a clean machine without building
+      - run: npm install
+      - run: npm run all
+
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: ./
       - uses: actions/upload-artifact@v2
         with:
-          name: README.md
-          path: __tests__/__stubs__/*.*
+          name: Results
+          path: __templates__/*.*

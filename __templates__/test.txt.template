@@ -1,0 +1,3 @@
+path: {{ file.dir }}
+filename: {{ file.name }}
+output filename: {{ outputFile.name }}
