@@ -2,7 +2,8 @@ import core from '@actions/core';
 import glob from '@actions/glob';
 import fs from 'fs';
 import handlebars from 'handlebars';
-import { buildBaseData, buildFileData, applyTemplate, buildAndApplyTemplate, Data, DataWithOutputFile } from './utils';
+import { Data, DataWithOutputFile } from './types';
+import { buildBaseData, buildFileData, applyTemplate, buildAndApplyTemplate } from './utils';
 
 const run = async (): Promise<void> => {
   try {
