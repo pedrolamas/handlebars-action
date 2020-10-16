@@ -28,6 +28,10 @@ The full expression syntax of Handlebars can be used on the templates.
     # Default: false
     delete-input-file: true
 
+    # HTML escape the rendered values
+    # Default: false
+    html-escape: false
+
     # Makes no real changes
     # default: false
     dry-run: false

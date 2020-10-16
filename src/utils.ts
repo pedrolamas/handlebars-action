@@ -2,6 +2,8 @@ import path from 'path';
 import handlebars from 'handlebars';
 import { BaseData, Data, FileData } from './types';
 
+type HandlebarsCompileOptions = Parameters<typeof handlebars.compile> extends [input: unknown, options?: infer T] ? T : never;
+
 export const buildBaseData = (): BaseData => ({
   env: { ...process.env },
   github: {
@@ -30,10 +32,4 @@ export const buildFileData = (filename: string): FileData => ({
   path: filename,
 });
 
-export const applyTemplate = (template: handlebars.TemplateDelegate, data: Data): string => template(data);
-
-export const buildAndApplyTemplate = (template: string, data: Data): string => {
-  const compiledTemplate = handlebars.compile(template);
-
-  return applyTemplate(compiledTemplate, data);
-};
+export const buildTemplate = <T = Data>(template: string, options?: HandlebarsCompileOptions): handlebars.TemplateDelegate<T> => handlebars.compile<T>(template, options);

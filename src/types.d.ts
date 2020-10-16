@@ -2,8 +2,10 @@ import path from 'path';
 
 type Config = {
   files: string;
-  dryRun: boolean;
   outputFilename: string;
+  deleteInputFile: boolean;
+  htmlEscape: boolean;
+  dryRun: boolean;
 };
 
 type FileData = path.ParsedPath | { path: string };

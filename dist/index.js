@@ -49,7 +49,6 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__webpack_require__(2186));
 const glob = __importStar(__webpack_require__(8090));
 const fs_1 = __importDefault(__webpack_require__(5747));
-const handlebars_1 = __importDefault(__webpack_require__(7492));
 const utils_1 = __webpack_require__(918);
 const run = () => __awaiter(void 0, void 0, void 0, function* () {
     var e_1, _a;
@@ -57,12 +56,13 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
         const config = {
             files: core.getInput('files'),
             outputFilename: core.getInput('output-filename'),
-            deleteInputFile: core.getInput('delete-input-file'),
+            deleteInputFile: core.getInput('delete-input-file') === 'true',
+            htmlEscape: core.getInput('html-escape') === 'true',
             dryRun: core.getInput('dry-run') === 'true',
         };
         core.debug(`Configuration:\n${JSON.stringify(config, undefined, 2)}`);
         const baseData = utils_1.buildBaseData();
-        const outputFilenameCompiledTemplate = handlebars_1.default.compile(config.outputFilename);
+        const outputFilenameTemplate = utils_1.buildTemplate(config.outputFilename, { noEscape: true });
         const globber = yield glob.create(config.files);
         try {
             for (var _b = __asyncValues(globber.globGenerator()), _c; _c = yield _b.next(), !_c.done;) {
@@ -73,10 +73,13 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
                 }
                 core.debug(`Reading input file "${inputFilename}"...`);
                 const data = Object.assign(Object.assign({}, baseData), { file: utils_1.buildFileData(inputFilename), date: new Date() });
-                const outputFilename = utils_1.applyTemplate(outputFilenameCompiledTemplate, data);
+                const outputFilename = outputFilenameTemplate(data);
                 const inputContent = yield fs_1.default.promises.readFile(inputFilename, 'utf8');
-                const dataWithOutputFile = Object.assign(Object.assign({}, data), { outputFile: utils_1.buildFileData(outputFilename) });
-                const outputContent = utils_1.buildAndApplyTemplate(inputContent, dataWithOutputFile);
+                const outputContentTemplate = utils_1.buildTemplate(inputContent, {
+                    noEscape: !config.htmlEscape,
+                });
+                const dataWithOutputFile = Object.assign(Object.assign({}, data), { outputFile: utils_1.buildFileData(outputFilename), date: new Date() });
+                const outputContent = outputContentTemplate(dataWithOutputFile);
                 if (config.deleteInputFile) {
                     core.debug(`Deleting input file...`);
                     if (!config.dryRun) {
@@ -115,7 +118,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.buildAndApplyTemplate = exports.applyTemplate = exports.buildFileData = exports.buildBaseData = void 0;
+exports.buildTemplate = exports.buildFileData = exports.buildBaseData = void 0;
 const path_1 = __importDefault(__webpack_require__(5622));
 const handlebars_1 = __importDefault(__webpack_require__(7492));
 exports.buildBaseData = () => {
@@ -144,11 +147,7 @@ exports.buildBaseData = () => {
     });
 };
 exports.buildFileData = (filename) => (Object.assign(Object.assign({}, path_1.default.parse(filename)), { path: filename }));
-exports.applyTemplate = (template, data) => template(data);
-exports.buildAndApplyTemplate = (template, data) => {
-    const compiledTemplate = handlebars_1.default.compile(template);
-    return exports.applyTemplate(compiledTemplate, data);
-};
+exports.buildTemplate = (template, options) => handlebars_1.default.compile(template, options);
 
 
 /***/ }),

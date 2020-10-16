@@ -1,16 +1,16 @@
 import * as core from '@actions/core';
 import * as glob from '@actions/glob';
 import fs from 'fs';
-import handlebars from 'handlebars';
-import { Data, DataWithOutputFile } from './types';
-import { buildBaseData, buildFileData, applyTemplate, buildAndApplyTemplate } from './utils';
+import { Config, Data, DataWithOutputFile } from './types';
+import { buildBaseData, buildFileData, buildTemplate } from './utils';
 
 const run = async (): Promise<void> => {
   try {
-    const config = {
+    const config: Config = {
       files: core.getInput('files'),
       outputFilename: core.getInput('output-filename'),
-      deleteInputFile: core.getInput('delete-input-file'),
+      deleteInputFile: core.getInput('delete-input-file') === 'true',
+      htmlEscape: core.getInput('html-escape') === 'true',
       dryRun: core.getInput('dry-run') === 'true',
     };
 
@@ -18,7 +18,7 @@ const run = async (): Promise<void> => {
 
     const baseData = buildBaseData();
 
-    const outputFilenameCompiledTemplate = handlebars.compile(config.outputFilename);
+    const outputFilenameTemplate = buildTemplate(config.outputFilename, { noEscape: true });
 
     const globber = await glob.create(config.files);
 
@@ -36,15 +36,20 @@ const run = async (): Promise<void> => {
         file: buildFileData(inputFilename),
         date: new Date(),
       };
-      const outputFilename = applyTemplate(outputFilenameCompiledTemplate, data);
+      const outputFilename = outputFilenameTemplate(data);
 
       const inputContent = await fs.promises.readFile(inputFilename, 'utf8');
+
+      const outputContentTemplate = buildTemplate(inputContent, {
+        noEscape: !config.htmlEscape,
+      });
 
       const dataWithOutputFile: DataWithOutputFile = {
         ...data,
         outputFile: buildFileData(outputFilename),
+        date: new Date(),
       };
-      const outputContent = buildAndApplyTemplate(inputContent, dataWithOutputFile);
+      const outputContent = outputContentTemplate(dataWithOutputFile);
 
       if (config.deleteInputFile) {
         core.debug(`Deleting input file...`);
