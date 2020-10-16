@@ -2,7 +2,7 @@
   "name": "@pedrolamas/handlebars-action",
   "version": "1.0.2",
   "private": true,
-  "description": "Handlebars GitHub Action",
+  "description": "GitHub Action for Handlebars Template Transformation",
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
@@ -26,6 +26,7 @@
     "handlebars",
     "action",
     "template",
+    "transformation",
     "github",
     "repository",
     "repo",

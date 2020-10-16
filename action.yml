@@ -1,6 +1,6 @@
-name: 'Handlebars Templating Engine'
+name: 'Handlebars Action'
 author: 'Pedro Lamas'
-description: 'Apply Handlebar templating to files'
+description: 'Transform files in your repository with Handlebars templating'
 branding:
   icon: 'zap'
   color: 'blue'
