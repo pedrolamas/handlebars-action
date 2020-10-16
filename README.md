@@ -9,9 +9,9 @@
 
 **Transform files in your repository with Handlebars templating!**
 
-This action will find files in the repository matching a specific search spec and process them as [Handlebars](https://handlebarsjs.com) templates, outputing the transformed content back to the same file or a new one.
+This action will find files in the repository matching a specific search spec and process them as [Handlebars](https://handlebarsjs.com) templates, writing the transformed content back to the same file or a new one.
 
-The full expression syntax of Handlebars can be used on the templates.
+Templates can use the full expression syntax of Handlebars, including the built-in helpers.
 
 ## Usage
 
