@@ -1,6 +1,6 @@
 {
   "name": "@pedrolamas/handlebars-action",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "private": true,
   "description": "GitHub Action for Handlebars Template Transformation",
   "main": "lib/main.js",
