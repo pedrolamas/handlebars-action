@@ -1,9 +1,9 @@
-# PedroLamas/handlebars-action
+# pedrolamas/handlebars-action
 
 ![Project Maintenance](https://img.shields.io/maintenance/yes/2020.svg)
-[![License](https://img.shields.io/github/license/PedroLamas/handlebars-action.svg)](https://github.com/PedroLamas/handlebars-action/blob/master/LICENSE)
+[![License](https://img.shields.io/github/license/pedrolamas/handlebars-action.svg)](https://github.com/pedrolamas/handlebars-action/blob/master/LICENSE)
 
-![CI](https://github.com/PedroLamas/handlebars-action/workflows/CI/badge.svg)
+![CI](https://github.com/pedrolamas/handlebars-action/workflows/CI/badge.svg)
 
 [![Twitter Follow](https://img.shields.io/twitter/follow/pedrolamas?style=social)](https://twitter.com/pedrolamas)
 
@@ -16,7 +16,7 @@ Templates can use the full expression syntax of Handlebars, including the built-
 ## Usage
 
 ```yaml
-- uses: PedroLamas/handlebars-action
+- uses: pedrolamas/handlebars-action
   with:
     # Files to process
     # Default: '**/*.template'
