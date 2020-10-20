@@ -1,11 +1,11 @@
 # pedrolamas/handlebars-action
 
-![Project Maintenance](https://img.shields.io/maintenance/yes/2020.svg)
-[![License](https://img.shields.io/github/license/pedrolamas/handlebars-action.svg)](https://github.com/pedrolamas/handlebars-action/blob/master/LICENSE)
+[![Project Maintenance](https://img.shields.io/maintenance/yes/2020.svg)](https://github.com/pedrolamas/handlebars-action 'GitHub Repository')
+[![License](https://img.shields.io/github/license/pedrolamas/handlebars-action.svg)](https://github.com/pedrolamas/handlebars-action/blob/master/LICENSE 'License')
 
-![CI](https://github.com/pedrolamas/handlebars-action/workflows/CI/badge.svg)
+[![CI](https://github.com/pedrolamas/handlebars-action/workflows/CI/badge.svg)](https://github.com/pedrolamas/handlebars-action/actions 'Build Status')
 
-[![Twitter Follow](https://img.shields.io/twitter/follow/pedrolamas?style=social)](https://twitter.com/pedrolamas)
+[![Twitter Follow](https://img.shields.io/twitter/follow/pedrolamas?style=social)](https://twitter.com/pedrolamas '@pedrolamas')
 
 **Transform files in your repository with Handlebars templating!**
 
