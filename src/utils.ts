@@ -1,6 +1,6 @@
-import path from 'path';
+import { BaseData, Data, FileData } from './types.d';
 import handlebars from 'handlebars';
-import { BaseData, Data, FileData } from './types';
+import path from 'path';
 
 type HandlebarsCompileOptions = Parameters<typeof handlebars.compile> extends [input: unknown, options?: infer T] ? T : never;
 
