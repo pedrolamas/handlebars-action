@@ -1,36 +1,42 @@
 env.user: {{ env.USER }}
 
-action: {{ github.action }}
-actor: {{ github.actor }}
-api_url: {{ github.api_url }}
-base_ref: {{ github.base_ref }}
-event_name: {{ github.event_name }}
-event_path: {{ github.event_path }}
-graphql_url: {{ github.graphql_url }}
-head_ref: {{ github.head_ref }}
-ref: {{ github.ref }}
-repository: {{ github.repository }}
-repository_name: {{ github.repository_name }}
-run_id: {{ github.run_id }}
-run_number: {{ github.run_number }}
-server_url: {{ github.server_url }}
-sha: {{ github.sha }}
-workflow: {{ github.workflow }}
-workspace: {{ github.workspace }}
+{{#with github}}
+github.action: {{ action }}
+github.actor: {{ actor }}
+github.api_url: {{ api_url }}
+github.base_ref: {{ base_ref }}
+github.event_name: {{ event_name }}
+github.event_path: {{ event_path }}
+github.graphql_url: {{ graphql_url }}
+github.head_ref: {{ head_ref }}
+github.ref: {{ ref }}
+github.repository: {{ repository }}
+github.repository_name: {{ repository_name }}
+github.run_id: {{ run_id }}
+github.run_number: {{ run_number }}
+github.server_url: {{ server_url }}
+github.sha: {{ sha }}
+github.workflow: {{ workflow }}
+github.workspace: {{ workspace }}
+{{/with}}
 
-file.path: {{ file.path }}
-file.root: {{ file.root }}
-file.dir: {{ file.dir }}
-file.base: {{ file.base }}
-file.ext: {{ file.ext }}
-file.name: {{ file.name }}
+{{#with file}}
+file.path: {{ path }}
+file.root: {{ root }}
+file.dir: {{ dir }}
+file.base: {{ base }}
+file.ext: {{ ext }}
+file.name: {{ name }}
+{{/with}}
 
-outputFile.path: {{ outputFile.path }}
-outputFile.root: {{ outputFile.root }}
-outputFile.dir: {{ outputFile.dir }}
-outputFile.base: {{ outputFile.base }}
-outputFile.ext: {{ outputFile.ext }}
-outputFile.name: {{ outputFile.name }}
+{{#with outputFile}}
+outputFile.path: {{ path }}
+outputFile.root: {{ root }}
+outputFile.dir: {{ dir }}
+outputFile.base: {{ base }}
+outputFile.ext: {{ ext }}
+outputFile.name: {{ name }}
+{{/with}}
 
 date: {{ date }}
 date.year: {{ date.year }}

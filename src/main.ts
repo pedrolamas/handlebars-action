@@ -1,8 +1,8 @@
 import * as core from '@actions/core';
 import * as glob from '@actions/glob';
-import fs from 'fs';
-import { Config, Data, DataWithOutputFile } from './types';
+import { Config, Data, DataWithOutputFile } from './types.d';
 import { buildBaseData, buildFileData, buildTemplate } from './utils';
+import fs from 'fs';
 
 const run = async (): Promise<void> => {
   try {
@@ -66,7 +66,9 @@ const run = async (): Promise<void> => {
       }
     }
   } catch (error) {
-    core.setFailed(error.message);
+    if (error instanceof Error) {
+      core.setFailed(error.message);
+    }
   }
 };
 
