@@ -1,6 +1,6 @@
 # pedrolamas/handlebars-action
 
-[![Project Maintenance](https://img.shields.io/maintenance/yes/2021.svg)](https://github.com/pedrolamas/handlebars-action 'GitHub Repository')
+[![Project Maintenance](https://img.shields.io/maintenance/yes/2022.svg)](https://github.com/pedrolamas/handlebars-action 'GitHub Repository')
 [![License](https://img.shields.io/github/license/pedrolamas/handlebars-action.svg)](https://github.com/pedrolamas/handlebars-action/blob/master/LICENSE 'License')
 
 [![CI](https://github.com/pedrolamas/handlebars-action/workflows/CI/badge.svg)](https://github.com/pedrolamas/handlebars-action/actions 'Build Status')
