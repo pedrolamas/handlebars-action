@@ -18,6 +18,7 @@ github.server_url: {{ server_url }}
 github.sha: {{ sha }}
 github.workflow: {{ workflow }}
 github.workspace: {{ workspace }}
+github.runner_os: {{ runner_os }}
 {{/with}}
 
 {{#with file}}
@@ -38,5 +39,10 @@ outputFile.ext: {{ ext }}
 outputFile.name: {{ name }}
 {{/with}}
 
-date: {{ date }}
-date.year: {{ date.year }}
+{{#with date}}
+date.year: {{ year }}
+date.hours: {{ hours }}
+date.fullString: {{ fullString }}
+date.utc.hours: {{ utc.hours }}
+date.utc.fullString: {{ utc.fullString }}
+{{/with}}

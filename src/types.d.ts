@@ -47,11 +47,32 @@ type BaseData = {
     runner_temp?: string;
     runner_tool_cache?: string;
   };
+  date: {
+    year: number;
+    month: number;
+    day: number;
+    hours: number;
+    minutes: number;
+    seconds: number;
+    epochTime: number;
+    timezoneOffset: number;
+    dateString: string;
+    timeString: string;
+    fullString: string;
+    utc: {
+      year: number;
+      month: number;
+      day: number;
+      hours: number;
+      minutes: number;
+      seconds: number;
+      fullString: string;
+    };
+  };
 };
 
 type Data = BaseData & {
   file: FileData;
-  date: Date;
 };
 
 type DataWithOutputFile = Data & {

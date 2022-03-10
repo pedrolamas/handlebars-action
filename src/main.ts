@@ -34,7 +34,6 @@ const run = async (): Promise<void> => {
       const data: Data = {
         ...baseData,
         file: buildFileData(inputFilename),
-        date: new Date(),
       };
       const outputFilename = outputFilenameTemplate(data);
 
@@ -47,7 +46,6 @@ const run = async (): Promise<void> => {
       const dataWithOutputFile: DataWithOutputFile = {
         ...data,
         outputFile: buildFileData(outputFilename),
-        date: new Date(),
       };
       const outputContent = outputContentTemplate(dataWithOutputFile);
 

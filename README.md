@@ -101,7 +101,24 @@ Templates can use the full expression syntax of Handlebars, including the built-
 
 ### Misc
 
-- `{{ date }}` - The current date as output from `new Date().toString()`.
+- `{{ date.year }}` - The year for the current date.
+- `{{ date.month }}` - The month for the current date.
+- `{{ date.day }}` - The day of the month for the current date.
+- `{{ date.hours }}` - The hours in the current date.
+- `{{ date.minutes }}` - The minutes in the current date.
+- `{{ date.seconds }}` - The seconds in the current date.
+- `{{ date.epochTime }}` - The number of milliseconds since the [ECMAScript epoch](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date#the_ecmascript_epoch_and_timestamps).
+- `{{ date.timezoneOffset }}` - The difference, in minutes, between the current date as evaluated in the UTC time zone, and the same date as local time.
+- `{{ date.dateString }}` - The date portion of the current date, as output from `new Date().toDateString()`.
+- `{{ date.timeString }}` - The time portion of the current date, as output from `new Date().toTimeString()`.
+- `{{ date.fullString }}` - The current date, as output from `new Date().toString()`
+- `{{ date.utc.year }}` - The year for the current date, according to universal time.
+- `{{ date.utc.month }}` - The month for the current date, according to universal time.
+- `{{ date.utc.day }}` - The day of the month for the current date, according to universal time.
+- `{{ date.utc.hours }}` - The hours in the current date, according to universal time.
+- `{{ date.utc.minutes }}` - The minutes in the current date, according to universal time.
+- `{{ date.utc.seconds }}` - The seconds in the current date, according to universal time.
+- `{{ date.utc.fullString }}` - The current date, as output from `new Date().toUTCString()`
 
 ## License
 
