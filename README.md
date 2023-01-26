@@ -1,11 +1,12 @@
 # pedrolamas/handlebars-action
 
-[![Project Maintenance](https://img.shields.io/maintenance/yes/2022.svg)](https://github.com/pedrolamas/handlebars-action 'GitHub Repository')
+[![Project Maintenance](https://img.shields.io/maintenance/yes/2023.svg)](https://github.com/pedrolamas/handlebars-action 'GitHub Repository')
 [![License](https://img.shields.io/github/license/pedrolamas/handlebars-action.svg)](https://github.com/pedrolamas/handlebars-action/blob/master/LICENSE 'License')
 
 [![CI](https://github.com/pedrolamas/handlebars-action/workflows/CI/badge.svg)](https://github.com/pedrolamas/handlebars-action/actions 'Build Status')
 
-[![Twitter Follow](https://img.shields.io/twitter/follow/pedrolamas?style=social)](https://twitter.com/pedrolamas '@pedrolamas')
+[![Follow pedrolamas on Twitter](https://img.shields.io/twitter/follow/pedrolamas?label=Follow%20@pedrolamas%20on%20Twitter&style=social)](https://twitter.com/pedrolamas)
+[![Follow pedrolamas on Mastodon](https://img.shields.io/mastodon/follow/109365776481898704?label=Follow%20@pedrolamas%20on%20Mastodon&domain=https%3A%2F%2Fhachyderm.io&style=social)](https://hachyderm.io/@pedrolamas)
 
 **Transform files in your repository with Handlebars templating!**
 
