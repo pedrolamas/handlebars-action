@@ -43,6 +43,7 @@ outputFile.name: {{ name }}
 date.year: {{ year }}
 date.hours: {{ hours }}
 date.fullString: {{ fullString }}
+date.isoString: {{ isoString }}
 date.utc.hours: {{ utc.hours }}
 date.utc.fullString: {{ utc.fullString }}
 {{/with}}

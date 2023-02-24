@@ -17,7 +17,7 @@ Templates can use the full expression syntax of Handlebars, including the built-
 ## Usage
 
 ```yaml
-- uses: pedrolamas/handlebars-action
+- uses: pedrolamas/handlebars-action@v2
   with:
     # Files to process
     # Default: '**/*.template'
@@ -67,8 +67,8 @@ Templates can use the full expression syntax of Handlebars, including the built-
 ### GitHub context
 
 - `{{ github.action }}` - The name of the action currently running, or the [id](https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#jobsjob_idstepsid) of a step. For example, for an action, `__repo-owner_name-of-action-repo`.
-- `{{ action_path }}` - The path where an action is located.
-- `{{ action_repository }}` - For a step executing an action, this is the owner and repository name of the action. For example, `actions/checkout`.
+- `{{ github.action_path }}` - The path where an action is located.
+- `{{ github.action_repository }}` - For a step executing an action, this is the owner and repository name of the action. For example, `actions/checkout`.
 - `{{ github.actor }}` - The name of the person or app that initiated the workflow. For example, `octocat`.
 - `{{ github.api_url }}` - Returns the API URL. For example: `https://api.github.com`.
 - `{{ github.base_ref }}` - Only set for forked repositories. The branch of the base repository.
@@ -113,6 +113,7 @@ Templates can use the full expression syntax of Handlebars, including the built-
 - `{{ date.dateString }}` - The date portion of the current date, as output from `new Date().toDateString()`.
 - `{{ date.timeString }}` - The time portion of the current date, as output from `new Date().toTimeString()`.
 - `{{ date.fullString }}` - The current date, as output from `new Date().toString()`
+- `{{ date.isoString }}` - The current date, as output from `new Date().toISOString()`
 - `{{ date.utc.year }}` - The year for the current date, according to universal time.
 - `{{ date.utc.month }}` - The month for the current date, according to universal time.
 - `{{ date.utc.day }}` - The day of the month for the current date, according to universal time.

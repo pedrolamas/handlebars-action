@@ -59,6 +59,7 @@ type BaseData = {
     dateString: string;
     timeString: string;
     fullString: string;
+    isoString: string;
     utc: {
       year: number;
       month: number;

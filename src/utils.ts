@@ -56,6 +56,7 @@ export const buildBaseData = (): BaseData => {
       dateString: date.toDateString(),
       timeString: date.toTimeString(),
       fullString: date.toString(),
+      isoString: date.toISOString(),
       utc: {
         year: date.getUTCFullYear(),
         month: date.getUTCMonth() + 1,
