@@ -18,6 +18,8 @@ const run = async (): Promise<void> => {
 
     const baseData = buildBaseData();
 
+    core.debug(`Base data:\n${JSON.stringify(baseData, undefined, 2)}`);
+
     const outputFilenameTemplate = buildTemplate(config.outputFilename, { noEscape: true });
 
     const globber = await glob.create(config.files);
