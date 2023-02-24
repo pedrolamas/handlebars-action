@@ -54,7 +54,7 @@ const glob = __importStar(__nccwpck_require__(8090));
 const utils_1 = __nccwpck_require__(918);
 const fs_1 = __importDefault(__nccwpck_require__(7147));
 const run = () => __awaiter(void 0, void 0, void 0, function* () {
-    var e_1, _a;
+    var _a, e_1, _b, _c;
     try {
         const config = {
             files: core.getInput('files'),
@@ -65,40 +65,48 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
         };
         core.debug(`Configuration:\n${JSON.stringify(config, undefined, 2)}`);
         const baseData = (0, utils_1.buildBaseData)();
+        core.debug(`Base data:\n${JSON.stringify(baseData, undefined, 2)}`);
         const outputFilenameTemplate = (0, utils_1.buildTemplate)(config.outputFilename, { noEscape: true });
         const globber = yield glob.create(config.files);
         try {
-            for (var _b = __asyncValues(globber.globGenerator()), _c; _c = yield _b.next(), !_c.done;) {
-                const inputFilename = _c.value;
-                const fileStats = yield fs_1.default.promises.stat(inputFilename);
-                if (!fileStats.isFile) {
-                    continue;
-                }
-                core.debug(`Reading input file "${inputFilename}"...`);
-                const data = Object.assign(Object.assign({}, baseData), { file: (0, utils_1.buildFileData)(inputFilename) });
-                const outputFilename = outputFilenameTemplate(data);
-                const inputContent = yield fs_1.default.promises.readFile(inputFilename, 'utf8');
-                const outputContentTemplate = (0, utils_1.buildTemplate)(inputContent, {
-                    noEscape: !config.htmlEscape,
-                });
-                const dataWithOutputFile = Object.assign(Object.assign({}, data), { outputFile: (0, utils_1.buildFileData)(outputFilename) });
-                const outputContent = outputContentTemplate(dataWithOutputFile);
-                if (config.deleteInputFile) {
-                    core.debug(`Deleting input file...`);
+            for (var _d = true, _e = __asyncValues(globber.globGenerator()), _f; _f = yield _e.next(), _a = _f.done, !_a;) {
+                _c = _f.value;
+                _d = false;
+                try {
+                    const inputFilename = _c;
+                    const fileStats = yield fs_1.default.promises.stat(inputFilename);
+                    if (!fileStats.isFile) {
+                        continue;
+                    }
+                    core.debug(`Reading input file "${inputFilename}"...`);
+                    const data = Object.assign(Object.assign({}, baseData), { file: (0, utils_1.buildFileData)(inputFilename) });
+                    const outputFilename = outputFilenameTemplate(data);
+                    const inputContent = yield fs_1.default.promises.readFile(inputFilename, 'utf8');
+                    const outputContentTemplate = (0, utils_1.buildTemplate)(inputContent, {
+                        noEscape: !config.htmlEscape,
+                    });
+                    const dataWithOutputFile = Object.assign(Object.assign({}, data), { outputFile: (0, utils_1.buildFileData)(outputFilename) });
+                    const outputContent = outputContentTemplate(dataWithOutputFile);
+                    if (config.deleteInputFile) {
+                        core.debug(`Deleting input file...`);
+                        if (!config.dryRun) {
+                            yield fs_1.default.promises.unlink(inputFilename);
+                        }
+                    }
+                    core.debug(`Writing output file "${outputFilename}"...`);
                     if (!config.dryRun) {
-                        yield fs_1.default.promises.unlink(inputFilename);
+                        yield fs_1.default.promises.writeFile(outputFilename, outputContent);
                     }
                 }
-                core.debug(`Writing output file "${outputFilename}"...`);
-                if (!config.dryRun) {
-                    yield fs_1.default.promises.writeFile(outputFilename, outputContent);
+                finally {
+                    _d = true;
                 }
             }
         }
         catch (e_1_1) { e_1 = { error: e_1_1 }; }
         finally {
             try {
-                if (_c && !_c.done && (_a = _b.return)) yield _a.call(_b);
+                if (!_d && !_a && (_b = _e.return)) yield _b.call(_e);
             }
             finally { if (e_1) throw e_1.error; }
         }
@@ -178,6 +186,7 @@ const buildBaseData = () => {
             dateString: date.toDateString(),
             timeString: date.toTimeString(),
             fullString: date.toString(),
+            isoString: date.toISOString(),
             utc: {
                 year: date.getUTCFullYear(),
                 month: date.getUTCMonth() + 1,
@@ -1226,16 +1235,18 @@ exports.create = create;
  * Computes the sha256 hash of a glob
  *
  * @param patterns  Patterns separated by newlines
+ * @param currentWorkspace  Workspace used when matching files
  * @param options   Glob options
+ * @param verbose   Enables verbose logging
  */
-function hashFiles(patterns, options, verbose = false) {
+function hashFiles(patterns, currentWorkspace = '', options, verbose = false) {
     return __awaiter(this, void 0, void 0, function* () {
         let followSymbolicLinks = true;
         if (options && typeof options.followSymbolicLinks === 'boolean') {
             followSymbolicLinks = options.followSymbolicLinks;
         }
         const globber = yield create(patterns, { followSymbolicLinks });
-        return internal_hash_files_1.hashFiles(globber, verbose);
+        return internal_hash_files_1.hashFiles(globber, currentWorkspace, verbose);
     });
 }
 exports.hashFiles = hashFiles;
@@ -1595,13 +1606,15 @@ const fs = __importStar(__nccwpck_require__(7147));
 const stream = __importStar(__nccwpck_require__(2781));
 const util = __importStar(__nccwpck_require__(3837));
 const path = __importStar(__nccwpck_require__(1017));
-function hashFiles(globber, verbose = false) {
+function hashFiles(globber, currentWorkspace, verbose = false) {
     var e_1, _a;
     var _b;
     return __awaiter(this, void 0, void 0, function* () {
         const writeDelegate = verbose ? core.info : core.debug;
         let hasMatch = false;
-        const githubWorkspace = (_b = process.env['GITHUB_WORKSPACE']) !== null && _b !== void 0 ? _b : process.cwd();
+        const githubWorkspace = currentWorkspace
+            ? currentWorkspace
+            : (_b = process.env['GITHUB_WORKSPACE']) !== null && _b !== void 0 ? _b : process.cwd();
         const result = crypto.createHash('sha256');
         let count = 0;
         try {
