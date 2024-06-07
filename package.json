@@ -3,7 +3,7 @@
   "version": "2.4.0",
   "private": true,
   "description": "GitHub Action for Handlebars Template Transformation",
-  "main": "dist/index.js",
+  "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
     "package": "ncc build --source-map --license licenses.txt",
