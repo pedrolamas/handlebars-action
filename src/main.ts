@@ -4,7 +4,7 @@ import { Config, Data, DataWithOutputFile } from './types.d';
 import { buildBaseData, buildFileData, buildTemplate } from './utils';
 import fs from 'fs';
 
-const run = async (): Promise<void> => {
+export const run = async (): Promise<void> => {
   try {
     const config: Config = {
       files: core.getInput('files'),
@@ -71,5 +71,3 @@ const run = async (): Promise<void> => {
     }
   }
 };
-
-run();
