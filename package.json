@@ -52,7 +52,7 @@
   "devDependencies": {
     "@github/local-action": "^2.6.2",
     "@types/jest": "^29.5.14",
-    "@types/node": "^22.13.4",
+    "@types/node": "^22.13.5",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
     "@vercel/ncc": "^0.38.3",
